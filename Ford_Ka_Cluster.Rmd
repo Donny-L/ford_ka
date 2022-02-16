@@ -111,7 +111,30 @@ ford_psyc <- psychographic %>%
 
 set.seed(2025)
 
+Cluster4 <- kmeans(ford_psyc, centers = 4, iter.max = 10, nstart = 25)
 
+Cluster4
+
+ford_psyc$cluster <- Cluster4$cluster
+
+```
+
+5. Crosstabs of 4-cluster analysis
+
+```{r}
+ford_psyc_1 <- ford_psyc %>%
+        rename_with(~psyc_q$Statement, starts_with("q"))
+```
+
+```{r}
+datasummary_balance(~cluster, 
+                    data = ford_psyc_1,
+                    output = 'kableExtra')
+```
+
+```{r}
+joined_data_again <- cbind(demographic, ford_psyc_1)
+datasummary_crosstab(cluster ~ Gender, data = joined_data_again)
 ```
 
 
